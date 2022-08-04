@@ -30,64 +30,69 @@ model Role {
 }
 
 model Product {
-  id      Int       @id @default(autoincrement())
-  name    String    @unique
-  price   Int
-  picture Picture[]
+  id            Int            @id @default(autoincrement())
+  name          String         @unique
+  price         Int
+  picture       Picture[]
   ordersProduct OrderProduct[]
 
   @@map("products")
 }
 
 model Picture {
-  id         Int     @id @default(autoincrement())
-  pictureUrl String
-  productId  Int
-  product    Product @relation(fields: [productId], references: [id])
-  isMain Boolean
+  id            Int            @id @default(autoincrement())
+  pictureUrl    String
+  description   String?
+  productId     Int
+  product       Product        @relation(fields: [productId], references: [id])
+  isMain        Boolean
   themesPicture ThemePicture[]
 
   @@map("pictures")
 }
 
 model Order {
-  id           Int      @id @default(autoincrement())
-  clientName   String
-  clientId     Int?
-  totalPrice  Int
-  deliveryDate DateTime
-  status       String
-  amountPaid   Int
+  id            Int            @id @default(autoincrement())
+  clientName    String
+  clientId      Int?
+  totalPrice    Int
+  deliveryDate  DateTime
+  status        String
+  amountPaid    Int
   orderProducts OrderProduct[]
+  theme         Theme          @relation(fields: [themeId], references: [id])
+  themeId       Int
 
   @@map("orders")
 }
 
 model OrderProduct {
-  id Int @id @default(autoincrement())
-  order Order @relation(fields: [orderId], references: [id])
-  orderId Int
-  products Product @relation(fields: [productId], references: [id])
+  id        Int     @id @default(autoincrement())
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   Int
+  products  Product @relation(fields: [productId], references: [id])
   productId Int
   priceUnit Int
-  quantity Int
+  quantity  Int
+  flavor    String
 
   @@map("orderProducts")
 }
 
 model Theme {
-  id Int @id @default(autoincrement())
-  name String @unique
+  id            Int            @id @default(autoincrement())
+  name          String         @unique
   themePictures ThemePicture[]
+  orders        Order[]
 
   @@map("themes")
 }
 
 model ThemePicture {
-  id Int @id @default(autoincrement())
-  theme Theme @relation(fields: [themeId], references: [id])
-  themeId Int
-  picture Picture @relation(fields: [pictureId], references: [id])
+  id        Int     @id @default(autoincrement())
+  theme     Theme   @relation(fields: [themeId], references: [id])
+  themeId   Int
+  picture   Picture @relation(fields: [pictureId], references: [id])
   pictureId Int
 
   @@map("themesPictures")
