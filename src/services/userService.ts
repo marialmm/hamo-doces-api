@@ -2,23 +2,40 @@ import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 
 import { CreateUserBody } from "../controllers/userController.js";
-import { badRequesError, unauthorizedError } from "../utils/errorUtils.js";
+import {
+    badRequesError,
+    conflictError,
+    unauthorizedError,
+} from "../utils/errorUtils.js";
 import * as userRepository from "../repositories/userRepository.js";
 import * as roleRepository from "../repositories/roleRepository.js";
 
 dotenv.config();
 
 export async function signup(userData: CreateUserBody) {
+    await checkEmailAlreadyExists(userData.email);
+
     const roleId = await getRoleId(userData.role);
+    userData.roleId = roleId;
 
     if (userData.role === "ADMIN") {
         validateAdminPassword(userData.adminPassword);
     }
 
     userData.password = encryptPassword(userData.password);
+
     delete userData.adminPassword;
+    delete userData.role;
 
     await userRepository.create({ ...userData, roleId });
+}
+
+async function checkEmailAlreadyExists(email: string) {
+    const user = await userRepository.getByEmail(email);
+
+    if (user) {
+        throw conflictError("Email already exists");
+    }
 }
 
 function validateAdminPassword(password: string) {
