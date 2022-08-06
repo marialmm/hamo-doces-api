@@ -8,9 +8,10 @@ beforeEach(async () => {
     await prisma.$executeRaw`TRUNCATE TABLE users RESTART IDENTITY`;
 });
 
-describe("Signup tests", () => {
+describe("POST /signup tests", () => {
     it("Given a valid input, should return 201 and create a new user", async () => {
         const userData = userFactory.createUserData();
+        delete userData.roleId;
 
         const response = await supertest(app).post("/signup").send(userData);
 

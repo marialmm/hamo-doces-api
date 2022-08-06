@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 import { CreateUserBody } from "../controllers/userController.js";
 import {
@@ -59,4 +60,39 @@ function encryptPassword(password: string) {
     const SALT = +process.env.SALT;
     const passwordHash = bcrypt.hashSync(password, SALT);
     return passwordHash;
+}
+
+export async function signin(userData: userRepository.SigninData) {
+    const user = await userRepository.getByEmail(userData.email);
+
+    if (!user) {
+        throw unauthorizedError("Invalid email or password");
+    }
+
+    validatePassword(userData.password, user.password);
+
+    const token = generateToken(user.id);
+
+    return {
+        token,
+        name: user.name,
+        role: user.role.name,
+    };
+}
+
+function validatePassword(password: string, passwordHash: string) {
+    if (!bcrypt.compareSync(password, passwordHash)) {
+        throw unauthorizedError("Invalid email or password");
+    }
+}
+
+function generateToken(userId: number) {
+    const secret = process.env.JWT_SECRET_KEY;
+    const expireDate = 60 * 60 * 24 * 7;
+    const config = {
+        expiresIn: expireDate,
+    };
+
+    const token = jwt.sign({ userId }, secret, config);
+    return token;
 }
