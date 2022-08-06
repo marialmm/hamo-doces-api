@@ -37,3 +37,33 @@ describe("POST /signup tests", () => {
         expect(user.length).toEqual(0);
     });
 });
+
+describe("POST /signin tests", () => {
+    it("Given a valid input, should return 200 and an object with token, name and role", async () => {
+        const userData = userFactory.createUserData();
+        delete userData.role;
+        delete userData.adminPassword;
+
+        await userFactory.insertUser({ ...userData, id: 1 });
+        const signinData = {
+            email: userData.email,
+            password: userData.password,
+        };
+
+        const response = await supertest(app).post("/signin").send(signinData);
+
+        expect(response.statusCode).toEqual(200);
+
+        const keys = ["token", "name", "role"];
+
+        expect(Object.keys(response.body)).toEqual(keys);
+    });
+
+    it("Given an invalid input, should return 422", async () => {
+        const loginData = {};
+
+        const response = await supertest(app).post("/signin").send(loginData);
+
+        expect(response.statusCode).toEqual(422);
+    })
+});
