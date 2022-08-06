@@ -13,5 +13,5 @@ export async function signup(req: Request, res: Response) {
 
     await userService.signup(userData);
 
-    res.sendStatus(200);
+    res.sendStatus(201);
 }
