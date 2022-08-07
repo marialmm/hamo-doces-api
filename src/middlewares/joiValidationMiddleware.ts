@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Schema } from "joi";
-import { wrongSchemaError } from "../../utils/errorUtils.js";
+import { wrongSchemaError } from "../utils/errorUtils.js";
 
 export function validateJoi(schema: Schema) {
     return (req: Request, res: Response, next: NextFunction) => {

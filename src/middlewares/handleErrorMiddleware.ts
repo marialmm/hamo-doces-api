@@ -1,5 +1,5 @@
 import { NextFunction, request, Request, Response } from "express";
-import { errorTypeToStatusCode } from "../../utils/errorUtils.js";
+import { errorTypeToStatusCode } from "../utils/errorUtils.js";
 
 export function handleError(error, req: Request, res: Response, next: NextFunction){
     console.log(error);

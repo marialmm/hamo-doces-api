@@ -1,8 +1,14 @@
-type AppError = "bad_request" | "unauthorized" | "conflict" | "wrong_schema";
+type AppError =
+    | "bad_request"
+    | "unauthorized"
+    | "not_found"
+    | "conflict"
+    | "wrong_schema";
 
 export function errorTypeToStatusCode(type: AppError) {
     if (type === "bad_request") return 400;
     if (type === "unauthorized") return 401;
+    if (type === "not_found") return 404;
     if (type === "conflict") return 409;
     if (type === "wrong_schema") return 422;
 }
@@ -17,6 +23,13 @@ export function badRequesError(message?: string) {
 export function unauthorizedError(message?: string) {
     return {
         type: "unauthorized",
+        message: message || "",
+    };
+}
+
+export function notFoundError(message?: string) {
+    return {
+        type: "not_found",
         message: message || "",
     };
 }

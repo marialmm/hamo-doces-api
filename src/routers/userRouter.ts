@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { validateJoi } from "../config/middlewares/joiValidationMiddleware.js";
+import { validateJoi } from "../middlewares/joiValidationMiddleware.js";
 import { signinSchema, signupSchema } from "../schemas/userSchemas.js";
 import * as userController from "../controllers/userController.js";
 
