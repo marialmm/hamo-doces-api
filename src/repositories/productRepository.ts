@@ -6,3 +6,14 @@ export async function getByName(name: string) {
     });
     return product;
 }
+
+export async function getForFilter() {
+    const products = await prisma.product.findMany({
+        select: {
+            id: true,
+            name: true,
+        },
+    });
+
+    return products;
+}
