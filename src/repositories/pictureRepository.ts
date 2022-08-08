@@ -28,3 +28,11 @@ export async function insertThemesPicture(themesPicture) {
         data: themesPicture,
     });
 }
+
+export async function getAll(filter: string) {
+    const pictures = await prisma.$queryRawUnsafe(
+        `SELECT p.id, p."pictureUrl" FROM pictures AS p JOIN "themesPictures" t ON t."pictureId" = p.id ${filter};`
+    );
+
+    return pictures;
+}

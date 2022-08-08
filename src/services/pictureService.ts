@@ -47,7 +47,7 @@ async function getThemeId(theme: string) {
 async function insertThemesPicture(pictureId: number, themes: string[]) {
     const themesPicture = [];
 
-    for(let i = 0; i < themes.length; i++) {
+    for (let i = 0; i < themes.length; i++) {
         const theme = themes[i];
         const id = await getThemeId(theme);
         themesPicture.push({
@@ -57,4 +57,20 @@ async function insertThemesPicture(pictureId: number, themes: string[]) {
     }
 
     await pictureRepository.insertThemesPicture(themesPicture);
+}
+
+export async function getAll(theme?: number, product?: number) {
+    const filter = ["WHERE"];
+    if (!isNaN(theme) && !isNaN(product)) {
+        filter.push(`t."themeId"=${theme} AND p."productId"=${product}`);
+    } else if (isNaN(theme) && !isNaN(product)) {
+        filter.push(`p."productId"=${product}`);
+    } else if (!isNaN(theme) && isNaN(product)) {
+        filter.push(`t."themeId"=${theme}`);
+    } else {
+        filter.pop();
+    }
+    const pictures = await pictureRepository.getAll(filter.join(" "));
+
+    return pictures;
 }

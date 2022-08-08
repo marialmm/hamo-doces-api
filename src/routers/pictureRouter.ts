@@ -17,5 +17,6 @@ pictureRouter.post(
     validateUserAdmin,
     pictureController.insert
 );
+pictureRouter.get("/pictures", pictureController.getAll);
 
 export default pictureRouter;
