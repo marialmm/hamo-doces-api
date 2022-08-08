@@ -1,3 +1,4 @@
+import { transformDocument } from "@prisma/client/runtime/index.js";
 import prisma from "../config/database.js";
 
 export async function getOrCreate(name: string) {
@@ -8,4 +9,15 @@ export async function getOrCreate(name: string) {
     });
 
     return theme;
+}
+
+export async function getAll() {
+    const themes = await prisma.theme.findMany({
+        select: {
+            id: true,
+            name: true,
+        },
+    });
+
+    return themes;
 }
