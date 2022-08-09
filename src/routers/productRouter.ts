@@ -4,6 +4,6 @@ import * as productController from "../controllers/productController.js";
 
 const productRouter = Router();
 
-productRouter.get("/products/filter", productController.getForFilter);  
+productRouter.get("/filter", productController.getForFilter);  
 
 export default productRouter

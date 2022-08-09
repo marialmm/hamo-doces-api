@@ -1,7 +1,8 @@
 import { Picture } from "@prisma/client";
-import { Request, response, Response } from "express";
+import { request, Request, response, Response } from "express";
 
 import * as pictureService from "../services/pictureService.js";
+import { badRequesError } from "../utils/errorUtils.js";
 
 export type InsertPictureBody = Omit<Picture, "id"> & {
     product: string;
@@ -21,4 +22,16 @@ export async function getAll(req: Request, res: Response) {
     const pictures = await pictureService.getAll(+theme, +product);
 
     res.send(pictures);
+}
+
+export async function getById(req: Request, res: Response) {
+    const { id } = req.params;
+
+    if (isNaN(+id)) {
+        throw badRequesError("Invalid id");
+    }
+
+    const picutre = await pictureService.getById(+id);
+
+    res.send(picutre);
 }

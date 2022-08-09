@@ -31,8 +31,39 @@ export async function insertThemesPicture(themesPicture) {
 
 export async function getAll(filter: string) {
     const pictures = await prisma.$queryRawUnsafe(
-        `SELECT p.id, p."pictureUrl" FROM pictures AS p JOIN "themesPictures" t ON t."pictureId" = p.id ${filter};`
+        `SELECT p.id, p."pictureUrl" 
+        FROM pictures AS p 
+        JOIN "themesPictures" t ON t."pictureId" = p.id
+        ${filter}
+        GROUP BY p.id
+        ;`
     );
 
     return pictures;
+}
+
+export async function getById(id: number) {
+    const picture = await prisma.picture.findFirst({
+        where: { id },
+        include: {
+            product: {
+                select: {
+                    name: true,
+                    id: true,
+                },
+            },
+            themesPicture: {
+                select: {
+                    theme: {
+                        select: {
+                            name: true,
+                            id: true,
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    return picture;
 }

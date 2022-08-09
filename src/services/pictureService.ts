@@ -60,6 +60,14 @@ async function insertThemesPicture(pictureId: number, themes: string[]) {
 }
 
 export async function getAll(theme?: number, product?: number) {
+    const filter = selectFilter(theme, product);
+
+    const pictures = await pictureRepository.getAll(filter);
+
+    return pictures;
+}
+
+function selectFilter(theme?: number, product?: number) {
     const filter = ["WHERE"];
     if (!isNaN(theme) && !isNaN(product)) {
         filter.push(`t."themeId"=${theme} AND p."productId"=${product}`);
@@ -70,7 +78,24 @@ export async function getAll(theme?: number, product?: number) {
     } else {
         filter.pop();
     }
-    const pictures = await pictureRepository.getAll(filter.join(" "));
 
-    return pictures;
+    return filter.join(" ");
+}
+
+export async function getById(id: number) {
+    const picture = await pictureRepository.getById(id);
+
+    if (!picture) {
+        throw notFoundError("Picture not found");
+    }
+
+    const themes = [];
+
+    picture.themesPicture.forEach((theme) => {
+        themes.push(theme.theme);
+    });
+
+    picture.themesPicture = themes;
+
+    return picture;
 }

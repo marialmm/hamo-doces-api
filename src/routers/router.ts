@@ -9,9 +9,9 @@ import userRouter from "./userRouter.js";
 const router = Router();
 
 router.use(userRouter);
-router.use(pictureRouter);
-router.use(themeRouter);
-router.use(productRouter);
+router.use("/pictures", pictureRouter);
+router.use("/themes", themeRouter);
+router.use("/products", productRouter);
 router.use(handleError);
 
 export default router;

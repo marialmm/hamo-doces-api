@@ -11,12 +11,14 @@ import {
 const pictureRouter = Router();
 
 pictureRouter.post(
-    "/picture",
+    "/",
     validateJoi(pictureSchema),
     validateToken,
     validateUserAdmin,
     pictureController.insert
 );
-pictureRouter.get("/pictures", pictureController.getAll);
 
+pictureRouter.get("/", pictureController.getAll);
+
+pictureRouter.get("/:id", pictureController.getById);
 export default pictureRouter;
