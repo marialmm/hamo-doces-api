@@ -22,3 +22,9 @@ async function checkProductAlreadyExists(name: string) {
         throw conflictError("Product already exists");
     }
 }
+
+export async function getAll() {
+    const products = await productRepository.getAll();
+
+    return products;
+}

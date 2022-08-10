@@ -1,4 +1,4 @@
-import { request, Request, Response } from "express";
+import { Request, Response } from "express";
 import { CreateProductData } from "../repositories/productRepository.js";
 
 import * as productService from "../services/productService.js";
@@ -15,4 +15,10 @@ export async function create(req: Request, res: Response) {
     await productService.create(body);
 
     res.sendStatus(201);
+}
+
+export async function getAll(req: Request, res: Response) {
+    const products = await productService.getAll();
+
+    res.send(products);
 }
