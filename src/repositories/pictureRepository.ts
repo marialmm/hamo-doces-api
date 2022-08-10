@@ -67,3 +67,15 @@ export async function getById(id: number) {
 
     return picture;
 }
+
+export async function deleteById(id: number) {
+    await prisma.themePicture.deleteMany({
+        where: {
+            pictureId: id,
+        },
+    });
+
+    await prisma.picture.delete({
+        where: { id },
+    });
+}

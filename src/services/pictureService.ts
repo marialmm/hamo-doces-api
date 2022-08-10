@@ -83,11 +83,7 @@ function selectFilter(theme?: number, product?: number) {
 }
 
 export async function getById(id: number) {
-    const picture = await pictureRepository.getById(id);
-
-    if (!picture) {
-        throw notFoundError("Picture not found");
-    }
+    const picture = await checkPictureExists(id);
 
     const themes = [];
 
@@ -98,4 +94,20 @@ export async function getById(id: number) {
     picture.themesPicture = themes;
 
     return picture;
+}
+
+async function checkPictureExists(id: number) {
+    const picture = await pictureRepository.getById(id);
+
+    if (!picture) {
+        throw notFoundError("Picture not found");
+    }
+
+    return picture;
+}
+
+export async function deleteById(id: number) {
+    await checkPictureExists(id);
+
+    await pictureRepository.deleteById(id);
 }

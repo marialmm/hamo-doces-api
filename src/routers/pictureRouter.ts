@@ -22,3 +22,10 @@ pictureRouter.get("/", pictureController.getAll);
 
 pictureRouter.get("/:id", pictureController.getById);
 export default pictureRouter;
+
+pictureRouter.delete(
+    "/:id",
+    validateToken,
+    validateUserAdmin,
+    pictureController.deleteById
+);
