@@ -21,4 +21,6 @@ productRouter.post(
 
 productRouter.get("/", validateToken, productController.getAll);
 
+productRouter.get("/:id", validateToken, productController.getById);
+
 export default productRouter;

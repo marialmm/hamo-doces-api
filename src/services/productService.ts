@@ -1,5 +1,5 @@
 import * as productRepository from "../repositories/productRepository.js";
-import { conflictError } from "../utils/errorUtils.js";
+import { conflictError, notFoundError } from "../utils/errorUtils.js";
 
 export async function getForFilter() {
     const products = await productRepository.getForFilter();
@@ -37,4 +37,14 @@ export async function getAll() {
     });
 
     return formatedProducts;
+}
+
+export async function getById(id: number) {
+    const product = await productRepository.getById(id);
+
+    if (!product) {
+        throw notFoundError("Product not found");
+    }
+
+    return product;
 }

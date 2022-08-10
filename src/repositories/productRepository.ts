@@ -35,8 +35,8 @@ export async function getAll() {
                     isMain: true,
                 },
                 select: {
-                    pictureUrl: true
-                }
+                    pictureUrl: true,
+                },
             },
             id: true,
             name: true,
@@ -45,4 +45,19 @@ export async function getAll() {
     });
 
     return products;
+}
+
+export async function getById(id: number) {
+    const product = await prisma.product.findFirst({
+        where: { id },
+        include: {
+            picture: {
+                select: {
+                    pictureUrl: true,
+                },
+            },
+        },
+    });
+
+    return product;
 }
