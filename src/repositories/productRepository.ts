@@ -29,14 +29,20 @@ export async function create(productData: CreateProductData) {
 
 export async function getAll() {
     const products = await prisma.product.findMany({
-        include: {
+        select: {
             picture: {
                 where: {
                     isMain: true,
                 },
+                select: {
+                    pictureUrl: true
+                }
             },
+            id: true,
+            name: true,
+            price: true,
         },
     });
 
-    return products
+    return products;
 }

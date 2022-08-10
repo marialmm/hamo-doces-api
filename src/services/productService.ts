@@ -26,5 +26,15 @@ async function checkProductAlreadyExists(name: string) {
 export async function getAll() {
     const products = await productRepository.getAll();
 
-    return products;
+    const formatedProducts = products.map((product) => {
+        const price = (product.price / 100).toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+        });
+        const picture = product.picture[0] ? product.picture[0].pictureUrl : "";
+
+        return { ...product, price, picture };
+    });
+
+    return formatedProducts;
 }
