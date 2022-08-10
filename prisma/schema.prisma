@@ -33,6 +33,7 @@ model Product {
   id            Int            @id @default(autoincrement())
   name          String         @unique
   price         Int
+  description    String?
   picture       Picture[]
   ordersProduct OrderProduct[]
 
@@ -74,7 +75,7 @@ model OrderProduct {
   productId Int
   priceUnit Int
   quantity  Int
-  flavor    String
+  flavor    String?
 
   @@map("orderProducts")
 }

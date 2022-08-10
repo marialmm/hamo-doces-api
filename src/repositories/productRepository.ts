@@ -1,3 +1,4 @@
+import { Product } from "@prisma/client";
 import prisma from "../config/database.js";
 
 export async function getByName(name: string) {
@@ -16,4 +17,12 @@ export async function getForFilter() {
     });
 
     return products;
+}
+
+export type CreateProductData = Omit<Product, "id">;
+
+export async function create(productData: CreateProductData) {
+    await prisma.product.create({
+        data: productData,
+    });
 }
