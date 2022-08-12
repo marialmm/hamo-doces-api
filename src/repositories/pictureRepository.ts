@@ -79,3 +79,19 @@ export async function deleteById(id: number) {
         where: { id },
     });
 }
+
+export async function deleteByProductId(id: number) {
+    await prisma.themePicture.deleteMany({
+        where: {
+            picture: {
+                productId: id,
+            },
+        },
+    });
+
+    await prisma.picture.deleteMany({
+        where: {
+            productId: id,
+        },
+    });
+}

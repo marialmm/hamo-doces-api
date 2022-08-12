@@ -1,4 +1,5 @@
 import * as productRepository from "../repositories/productRepository.js";
+import * as pictureRepository from "../repositories/pictureRepository.js";
 import { conflictError, notFoundError } from "../utils/errorUtils.js";
 
 export async function getForFilter() {
@@ -63,5 +64,6 @@ async function checkProductExists(id: number) {
 export async function deleteById(id: number) {
     await checkProductExists(id);
 
+    await pictureRepository.deleteByProductId(id);
     await productRepository.deleteById(id);
 }
