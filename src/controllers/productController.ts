@@ -35,3 +35,15 @@ export async function getById(req: Request, res: Response) {
 
     res.send(product);
 }
+
+export async function deleteById(req: Request, res: Response) {
+    const { id } = req.params;
+
+    if (isNaN(+id)) {
+        throw badRequesError("Invalid id");
+    }
+
+    await productService.deleteById(+id);
+
+    res.sendStatus(200);
+}

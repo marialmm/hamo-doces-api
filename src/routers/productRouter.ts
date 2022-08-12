@@ -23,4 +23,11 @@ productRouter.get("/", validateToken, productController.getAll);
 
 productRouter.get("/:id", validateToken, productController.getById);
 
+productRouter.delete(
+    "/:id",
+    validateToken,
+    validateUserAdmin,
+    productController.deleteById
+);
+
 export default productRouter;

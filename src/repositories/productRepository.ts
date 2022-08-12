@@ -61,3 +61,9 @@ export async function getById(id: number) {
 
     return product;
 }
+
+export async function deleteById(id: number) {
+    await prisma.product.delete({
+        where: { id },
+    });
+}

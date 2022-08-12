@@ -40,6 +40,17 @@ export async function getAll() {
 }
 
 export async function getById(id: number) {
+    const product: any = await checkProductExists(id);
+
+    product.price = (product.price / 100).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+    });
+
+    return product;
+}
+
+async function checkProductExists(id: number) {
     const product = await productRepository.getById(id);
 
     if (!product) {
@@ -47,4 +58,10 @@ export async function getById(id: number) {
     }
 
     return product;
+}
+
+export async function deleteById(id: number) {
+    await checkProductExists(id);
+
+    await productRepository.deleteById(id);
 }
