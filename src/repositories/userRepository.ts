@@ -40,3 +40,16 @@ export async function getById(id: number) {
 
     return user;
 }
+
+export async function getClientByName(name: string) {
+    const client = await prisma.user.findFirst({
+        where: {
+            name,
+            role: {
+                name: "CLIENT",
+            },
+        },
+    });
+
+    return client;
+}
