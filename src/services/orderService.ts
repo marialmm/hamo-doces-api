@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 import { CreateOrderBody } from "../controllers/orderController.js";
 import * as themeRepository from "../repositories/themeRepository.js";
 import * as orderRepository from "../repositories/orderRepository.js";
@@ -67,7 +69,30 @@ async function createOrderProducts(products, orderId: number) {
 }
 
 export async function getAll() {
-    const products = await orderRepository.getAll();
+    const orders = await orderRepository.getAll();
 
-    return products;
+    const formatedOrders = orders.map((order) => {
+        const totalPrice = (order.totalPrice / 100).toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+        });
+
+        const products = order.orderProducts.map((orderProduct) => {
+            return orderProduct.products;
+        });
+
+        const deliveryDate = dayjs(new Date(order.deliveryDate)).format(
+            "DD/MM/YYYY"
+        );
+
+        return {
+            id: order.id,
+            clientName: order.clientName,
+            totalPrice: totalPrice,
+            deliveryDate: deliveryDate,
+            status: order.status,
+            products: products,
+        };
+    });
+    return formatedOrders;
 }

@@ -37,6 +37,7 @@ export async function getAll() {
                     products: {
                         select: {
                             name: true,
+                            id: true,
                         },
                     },
                 },
