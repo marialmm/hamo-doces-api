@@ -18,4 +18,6 @@ orderRouter.post(
     orderController.create
 );
 
+orderRouter.get("/", validateToken, validateUserAdmin, orderController.getAll);
+
 export default orderRouter;

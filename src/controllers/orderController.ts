@@ -8,7 +8,7 @@ export type CreateOrderBody = Omit<Order, "id" | "clientId" | "themeId"> & {
         quantity: number;
         flavor?: string;
         id: number;
-    },
+    };
     theme: string;
 };
 
@@ -18,4 +18,10 @@ export async function create(req: Request, res: Response) {
     await orderService.create(body);
 
     res.sendStatus(201);
+}
+
+export async function getAll(req: Request, res: Response) {
+    const orders = await orderService.getAll();
+
+    res.send(orders);
 }

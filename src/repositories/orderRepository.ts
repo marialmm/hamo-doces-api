@@ -20,3 +20,29 @@ export async function createOrderProducts(
         data: orderProducts,
     });
 }
+
+export async function getAll() {
+    const orders = await prisma.order.findMany({
+        where: {
+            NOT: { status: "cancelled" },
+        },
+        select: {
+            id: true,
+            deliveryDate: true,
+            totalPrice: true,
+            status: true,
+            clientName: true,
+            orderProducts: {
+                select: {
+                    products: {
+                        select: {
+                            name: true,
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    return orders;
+}

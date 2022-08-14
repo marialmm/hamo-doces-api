@@ -65,3 +65,9 @@ async function createOrderProducts(products, orderId: number) {
 
     await orderRepository.createOrderProducts(orderProducts);
 }
+
+export async function getAll() {
+    const products = await orderRepository.getAll();
+
+    return products;
+}

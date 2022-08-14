@@ -13,6 +13,7 @@ export async function getForFilter() {
         select: {
             id: true,
             name: true,
+            price: true,
         },
     });
 
