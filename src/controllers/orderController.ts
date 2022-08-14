@@ -2,6 +2,7 @@ import { Order } from "@prisma/client";
 import { Request, Response } from "express";
 
 import * as orderService from "../services/orderService.js";
+import { badRequesError } from "../utils/errorUtils.js";
 
 export type CreateOrderBody = Omit<Order, "id" | "clientId" | "themeId"> & {
     products: {
@@ -24,4 +25,16 @@ export async function getAll(req: Request, res: Response) {
     const orders = await orderService.getAll();
 
     res.send(orders);
+}
+
+export async function getById(req: Request, res: Response) {
+    const {id} = req.params;
+
+    if(isNaN(+id)){
+        throw badRequesError("Invalid id");
+    }
+
+    const order = await orderService.getById(+id);
+
+    res.send(order);
 }

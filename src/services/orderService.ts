@@ -1,11 +1,10 @@
-import dayjs from "dayjs";
-
 import { CreateOrderBody } from "../controllers/orderController.js";
+import { notFoundError } from "../utils/errorUtils.js";
 import * as themeRepository from "../repositories/themeRepository.js";
 import * as orderRepository from "../repositories/orderRepository.js";
 import * as userRepository from "../repositories/userRepository.js";
 import * as productRepository from "../repositories/productRepository.js";
-import { notFoundError } from "../utils/errorUtils.js";
+import { formatCurrency, formatDate } from "../utils/formatDataUtils.js";
 
 export async function create(orderData: CreateOrderBody) {
     const { theme, clientName, products } = orderData;
@@ -72,18 +71,13 @@ export async function getAll() {
     const orders = await orderRepository.getAll();
 
     const formatedOrders = orders.map((order) => {
-        const totalPrice = (order.totalPrice / 100).toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-        });
+        const totalPrice = formatCurrency(order.totalPrice);
 
         const products = order.orderProducts.map((orderProduct) => {
             return orderProduct.products;
         });
 
-        const deliveryDate = dayjs(new Date(order.deliveryDate)).format(
-            "DD/MM/YYYY"
-        );
+        const deliveryDate = formatDate(order.deliveryDate);
 
         return {
             id: order.id,
@@ -95,4 +89,38 @@ export async function getAll() {
         };
     });
     return formatedOrders;
+}
+
+export async function getById(id: number) {
+    const order = await orderRepository.getById(id);
+
+    if (!order) {
+        throw notFoundError("Order not found");
+    }
+
+    const amountPaid = formatCurrency(order.amountPaid);
+    const totalPrice = formatCurrency(order.totalPrice);
+    const deliveryDate = formatDate(order.deliveryDate);
+
+    const products = order.orderProducts.map((product) => {
+        const priceUnit = formatCurrency(product.priceUnit);
+        return {
+            id: product.products.id,
+            name: product.products.name,
+            flavor: product.flavor,
+            quantity: product.quantity,
+            priceUnit,
+        };
+    });
+
+    return {
+        id: order.id,
+        clientName: order.clientName,
+        theme: order.theme,
+        status: order.status,
+        amountPaid,
+        totalPrice,
+        deliveryDate,
+        products,
+    };
 }

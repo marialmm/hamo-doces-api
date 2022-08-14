@@ -20,4 +20,11 @@ orderRouter.post(
 
 orderRouter.get("/", validateToken, validateUserAdmin, orderController.getAll);
 
+orderRouter.get(
+    "/:id",
+    validateToken,
+    validateUserAdmin,
+    orderController.getById
+);
+
 export default orderRouter;

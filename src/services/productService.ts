@@ -1,6 +1,7 @@
 import * as productRepository from "../repositories/productRepository.js";
 import * as pictureRepository from "../repositories/pictureRepository.js";
 import { conflictError, notFoundError } from "../utils/errorUtils.js";
+import { formatCurrency } from "../utils/formatDataUtils.js";
 
 export async function getForFilter() {
     const products = await productRepository.getForFilter();
@@ -28,10 +29,7 @@ export async function getAll() {
     const products = await productRepository.getAll();
 
     const formatedProducts = products.map((product) => {
-        const price = (product.price / 100).toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-        });
+        const price = formatCurrency(product.price);
         const picture = product.picture[0] ? product.picture[0].pictureUrl : "";
 
         return { ...product, price, picture };
@@ -43,10 +41,7 @@ export async function getAll() {
 export async function getById(id: number) {
     const product: any = await checkProductExists(id);
 
-    product.price = (product.price / 100).toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-    });
+    product.price = formatCurrency(product.price);
 
     return product;
 }

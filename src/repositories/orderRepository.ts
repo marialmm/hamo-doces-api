@@ -47,3 +47,33 @@ export async function getAll() {
 
     return orders;
 }
+
+export async function getById(id: number) {
+    const order = await prisma.order.findFirst({
+        where: { id },
+        select: {
+            id: true,
+            amountPaid: true,
+            clientName: true,
+            theme: true,
+            deliveryDate: true,
+            status: true,
+            totalPrice: true,
+            orderProducts: {
+                select: {
+                    products: {
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
+                    flavor: true,
+                    priceUnit: true,
+                    quantity: true,
+                },
+            },
+        },
+    });
+
+    return order;
+}
