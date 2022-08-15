@@ -5,6 +5,7 @@ import prisma from "../../src/config/database.js";
 import * as userFactory from "../factories/userFactory.js";
 import * as productFactory from "../factories/productFactory.js";
 import * as pictureFactory from "../factories/pictureFactory.js";
+import * as themeFactory from "../factories/themeFactory.js";
 
 beforeEach(async () => {
     await prisma.$executeRaw`
@@ -95,5 +96,19 @@ describe("POST /pictures tests", () => {
         const picture = await prisma.picture.findFirst({});
 
         expect(picture).toBeNull();
+    });
+});
+
+describe("GET /pictures tests", () => {
+    it("Given a valid token, should return an array with the pictures", async () => {
+        const token = await userFactory.insertUserAndCreateToken("ADMIN");
+
+        await pictureFactory.insertPictureAndThemeAndProduct();
+
+        const response = await supertest(app)
+            .get("/pictures")
+            .set({ Authorization: `Bearer ${token}` });
+
+        expect(response.body).not.toBeUndefined();
     });
 });
