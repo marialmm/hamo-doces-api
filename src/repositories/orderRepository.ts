@@ -77,3 +77,10 @@ export async function getById(id: number) {
 
     return order;
 }
+
+export async function update(id: number, orderData: Partial<CreateOrderData>) {
+    await prisma.order.update({
+        where: { id },
+        data: orderData,
+    });
+}

@@ -5,7 +5,7 @@ import {
     validateUserAdmin,
 } from "../middlewares/authMiddleware.js";
 import { validateJoi } from "../middlewares/joiValidationMiddleware.js";
-import { orderSchema } from "../schemas/orderSchemas.js";
+import { orderSchema, updateOrderSchema } from "../schemas/orderSchemas.js";
 import * as orderController from "../controllers/orderController.js";
 
 const orderRouter = Router();
@@ -25,6 +25,14 @@ orderRouter.get(
     validateToken,
     validateUserAdmin,
     orderController.getById
+);
+
+orderRouter.patch(
+    "/:id",
+    validateToken,
+    validateUserAdmin,
+    validateJoi(updateOrderSchema),
+    orderController.update
 );
 
 export default orderRouter;

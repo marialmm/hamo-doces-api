@@ -92,7 +92,7 @@ export async function getAll() {
 }
 
 export async function getById(id: number) {
-    const order = await orderRepository.getById(id);
+    const order = await checkOrderExists(id);
 
     if (!order) {
         throw notFoundError("Order not found");
@@ -123,4 +123,29 @@ export async function getById(id: number) {
         deliveryDate,
         products,
     };
+}
+
+async function checkOrderExists(id: number){
+    const order = await orderRepository.getById(id);
+
+    if (!order) {
+        throw notFoundError("Order not found");
+    }
+
+    return order
+}
+
+export async function update(id: number, body: Partial<CreateOrderBody>) {
+    const orderInfo: Partial<orderRepository.CreateOrderData> = {};
+
+    if(body.theme){
+        orderInfo.themeId = await getThemeId(body.theme);
+        delete body.theme;
+    }
+
+    if(body.clientName){
+        orderInfo.clientId = await getClientId(body.clientName);
+    }
+
+    await orderRepository.update(id, {...orderInfo, ...body})
 }

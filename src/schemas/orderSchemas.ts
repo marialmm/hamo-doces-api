@@ -21,3 +21,24 @@ export const orderSchema = Joi.object<CreateOrderBody>({
         .required(),
     theme: Joi.string().required(),
 });
+
+export const updateOrderSchema = Joi.object<CreateOrderBody>({
+    clientName: Joi.string().optional(),
+    totalPrice: Joi.number().min(1).integer().optional(),
+    deliveryDate: Joi.date().min("now").optional(),
+    status: Joi.string()
+        .valid("accepted", "making", "cancelled", "delivered")
+        .optional(),
+    amountPaid: Joi.number().integer().optional(),
+    products: Joi.array()
+        .items(
+            Joi.object({
+                quantity: Joi.number().min(1).integer().optional(),
+                flavor: Joi.string().optional(),
+                id: Joi.number().optional(),
+            }).optional()
+        )
+        .min(1)
+        .optional(),
+    theme: Joi.string().optional(),
+})

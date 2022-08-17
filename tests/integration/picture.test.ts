@@ -100,14 +100,11 @@ describe("POST /pictures tests", () => {
 });
 
 describe("GET /pictures tests", () => {
-    it("Given a valid token, should return an array with the pictures", async () => {
-        const token = await userFactory.insertUserAndCreateToken("ADMIN");
-
+    it("Should return an array with the pictures", async () => {
         await pictureFactory.insertPictureAndThemeAndProduct();
 
         const response = await supertest(app)
-            .get("/pictures")
-            .set({ Authorization: `Bearer ${token}` });
+            .get("/pictures");
 
         expect(response.body).not.toBeUndefined();
     });

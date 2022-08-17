@@ -38,3 +38,17 @@ export async function getById(req: Request, res: Response) {
 
     res.send(order);
 }
+
+export async function update(req: Request, res: Response){
+    const body: Partial<CreateOrderBody> = req.body;
+
+    const {id} = req.params;
+
+    if(isNaN(+id)){
+        throw badRequesError("Invalid id");
+    }
+
+    await orderService.update(+id, body);
+
+    res.sendStatus(201);
+}
